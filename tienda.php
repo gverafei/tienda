@@ -26,9 +26,6 @@ class Tienda {
         if ( self::$mysqli->connect_error ) {
             die( 'Error de Conexión (' . self::$mysqli->connect_errno . ') ' . self::$mysqli->connect_error );
         }
-
-        // Con echo, imprimimos en pantalla que nos conectamos con éxito!
-        //echo '<p>Éxito...! Conectado desde ' . self::$mysqli->host_info . "</p>";
     }
 
     public function obten_conexion()

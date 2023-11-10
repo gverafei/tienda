@@ -3,10 +3,10 @@ include_once('tienda.php');   // Incluye el archivo tienda.php dentro de este
 $tienda = new Tienda(); // Crea el objeto que tiene las funciones de conexión a MySQL
 $mysqli = $tienda->obten_conexion();    // Se obtiene la conexión
 
-function tabla($resultado, $tabla_nombre)
+function tabla($resultado, $tabla_nombre, $tabla_descripcion)
 {
-    /* obtener los valores */
     echo "<h2>Tabla {$tabla_nombre}</h2>";
+    echo "<p>{$tabla_descripcion}</p>";
     $i = 0;
     echo '<table class="table table-sm table-striped table-bordered">';
     while ($fila = $resultado->fetch_assoc()) :    // Recorremos para ir fila x fila
@@ -41,9 +41,8 @@ function tabla($resultado, $tabla_nombre)
 </head>
 
 <body class="m-4">
-    <?php
-    // Aqui podemos hacer consultas a la base de datos
-    echo '<p>Ejercicio 1. Obtener todos los fabricantes.</p>';
+    <?php    
+    // Obtenemos todos los fabricantes
     $resultado = null;  // Guarda el resultado de la consulta
     $consulta = "SELECT * FROM fabricante";
     // Creamos la consulta
@@ -57,11 +56,10 @@ function tabla($resultado, $tabla_nombre)
         $sentencia->close();
 
         // Se envia el resultado de la consulta a la funcion para su impresión
-        tabla($resultado, 'Fabricante');
+        tabla($resultado, 'Fabricante', 'Ejercicio 1. Obtener todos los fabricantes.');
     }
 
     // Obtenemos los productos de Asus
-    echo '<p>Ejercicio 2. Obtener los productos del fabricante llamado Asus.</p>';
     $resultado = null;  // Guarda el resultado de la consulta
     $consulta = "SELECT producto.id, producto.nombre, producto.precio, fabricante.nombre AS fabricante_nombre
                 FROM fabricante INNER JOIN producto ON fabricante.id=producto.id_fabricante WHERE fabricante.nombre = ?";
@@ -79,11 +77,10 @@ function tabla($resultado, $tabla_nombre)
         $resultado = $sentencia->get_result();
         $sentencia->close();
 
-        tabla($resultado, 'Fabricante Asus');
+        tabla($resultado, 'Fabricante Asus', 'Ejercicio 2. Obtener los productos del fabricante llamado Asus.');
     }
 
     // Obtenemos precio promedio que no sean Crucial
-    echo '<p>Ejercicio 3. Obtener obtener el precio promedio por cada fabricante de computadoras mayores a 150 y que no sea Crucial.</p>';
     $resultado = null;  // Guarda el resultado de la consulta
     $consulta = "SELECT fabricante.nombre, AVG(producto.precio) precio_promedio FROM fabricante INNER JOIN producto ON 
                 fabricante.id=producto.id_fabricante WHERE fabricante.nombre != ? GROUP BY fabricante.nombre HAVING AVG(producto.precio) > ?";
@@ -102,7 +99,7 @@ function tabla($resultado, $tabla_nombre)
         $resultado = $sentencia->get_result();
         $sentencia->close();
 
-        tabla($resultado, 'Precios promedio');
+        tabla($resultado, 'Precios promedio', 'Ejercicio 3. Obtener obtener el precio promedio por cada fabricante de computadoras mayores a 150 y que no sea Crucial.');
     }
 
     ?>
